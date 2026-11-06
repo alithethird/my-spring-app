@@ -3,9 +3,9 @@ FROM eclipse-temurin:21-jdk AS build
 WORKDIR /build
 COPY .mvn .mvn
 COPY mvnw pom.xml ./
-RUN --mount=type=cache,target=/root/.m2 ./mvnw -B -q dependency:go-offline
+RUN --mount=type=cache,id=s/f49ac6da-c605-48c6-a5f0-268868a26e9c-/root/.m2,target=/root/.m2 ./mvnw -B -q dependency:go-offline
 COPY src src
-RUN --mount=type=cache,target=/root/.m2 ./mvnw -B -q package -DskipTests \
+RUN --mount=type=cache,id=s/f49ac6da-c605-48c6-a5f0-268868a26e9c-/root/.m2,target=/root/.m2 ./mvnw -B -q package -DskipTests \
     && java -Djarmode=tools -jar target/spring-boot-0.0.1.jar extract --layers --destination /build/layers
 
 FROM eclipse-temurin:21-jre
